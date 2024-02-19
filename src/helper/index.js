@@ -15,7 +15,7 @@ const _flat = (tree) => {
     } = item;
     return result.concat(
       rest,
-      Array.isArray(children) ? this._flat(children) : []
+      Array.isArray(children) ? _flat(children) : []
     );
   }, []);
 }
@@ -31,7 +31,7 @@ const _filterNode = (tree, func) => {
   return tree.map(node => ({ ...node }))
     .filter(node => {
       if (node.children && node.children.length) {
-        node.children = this.filterNode(node.children, func);
+        node.children = _filterNode(node.children, func);
       }
       return func(node) || node.children && node.children.length;
     });
