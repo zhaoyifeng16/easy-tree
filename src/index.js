@@ -45,16 +45,24 @@ export const insertAfter = (tree, predicate, newData) => {
  * @param tree
  * @param {function} predicate 条件
  * @param {T} newData 新数据
+ * @param isBefore 是否插入到前面，默认最后
  * @return {[]}
  */
-export const insertToChild = (tree, predicate, newData) => {
+export const insertToChild = (tree, predicate, newData, isBefore = false) => {
   const newDataArray = Array.isArray(newData) ? newData : [ newData ];
   const insertRecursive = node => {
     if (predicate(node)) {
-      return {
-        ...node,
-        children: [ ...node.children || [], ...newDataArray ]
-      };
+      if (isBefore) {
+        return {
+          ...node,
+          children: [ ...newDataArray, ...node.children || [] ]
+        };
+      } else {
+        return {
+          ...node,
+          children: [ ...node.children || [], ...newDataArray ]
+        };
+      }
     }
 
     if (node.children) {
@@ -127,7 +135,7 @@ export const replaceNode = (tree, func) => {
   return tree.map(node => {
     return {
       ...func(node),
-      children: this.replaceNode(node.children || [], func)
+      children: replaceNode(node.children || [], func)
     }
   })
 }

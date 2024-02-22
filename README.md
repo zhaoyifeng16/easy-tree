@@ -7,71 +7,69 @@ $ npm install @zhaoyifeng/easy-tree
 
 ```javascript
 import * as easyTree from '@zhaoyifeng/easy-tree'
-```
-
-```javascript
+// or
 import { flat, filterNode } from '@zhaoyifeng/easy-tree'
 ```
 
 ## API
 
-### flat
+### flat(tree)
 扁平化
 
 ```javascript
 const data = flat(treeData)
 ```
 
-### findNode
+### findNode(tree, predicate)
 查找
 
 ```javascript
 const data = findNode(treeData, (node) => node.key === '0')
 ```
 
-### filterNode
+### filterNode(tree, predicate)
 筛选
 
 ```javascript
 const data = filterNode(treeData, (node) => node.key === '0')
 ```
 
-### insertBefore
+### insertBefore(tree, predicate, object)
 向节点前插入数据
 
 ```javascript
 const data = insertBefore(treeData, (node) => node.key === '0', { title: '0000', key: '0000' })
 ```
 
-### insertAfter
+### insertAfter(tree, predicate, object)
 向节点后插入数据
 
 ```javascript
 const data = insertAfter(treeData, (node) => node.key === '0', { title: '0000', key: '0000' })
 ```
 
-### insertToChild
-插入到子节点(最后)
+### insertToChild(tree, predicate, isBefore = false)
+插入到子节点
 
 ```javascript
-const data = insertToChild(treeData, (node) => node.key === '1', { title: '0000', key: '0000' })
+const data = insertToChild(treeData, (node) => node.key === '1', { title: '0000', key: '0000' }, true)
 ```
 
-### updateNode
+### updateNode(tree, predicate)
 修改节点
 
 ```javascript
 const data = updateNode(treeData, (node) => node.key === '0', (node) => ({ ...node, title: '0000' }))
 ```
 
-### deleteNode
+### deleteNode(tree, predicate)
 删除节点
 
 ```javascript
 const data = deleteNode(treeData, (node) => node.key === '1')
 ```
 
-### replaceNode
+### replaceNode(tree, func)
 替换树节点对象
 
 ```javascript
