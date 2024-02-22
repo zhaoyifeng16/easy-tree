@@ -3,18 +3,18 @@ import { _filterNode, _flat, _insertHelper } from './helper';
 /**
  * 树筛选
  */
-const filterNode = (tree, func) => {
+export const filterNode = (tree, func) => {
   return _filterNode(tree, func);
 }
 
 /** 树查找 */
-const findNode = (tree, func) => {
+export const findNode = (tree, func) => {
   return _flat(tree)
     .filter(func);
 }
 
 /** 扁平化 */
-const flat = (tree) => {
+export const flat = (tree) => {
   return _flat(tree);
 }
 
@@ -25,7 +25,7 @@ const flat = (tree) => {
  * @param {T | T[]} newData 新数据
  * @return {[]}
  */
-const insertBefore = (tree, predicate, newData) => {
+export const insertBefore = (tree, predicate, newData) => {
   return _insertHelper(tree, predicate, newData, 'before');
 }
 
@@ -36,7 +36,7 @@ const insertBefore = (tree, predicate, newData) => {
  * @param {T | T[]} newData 新数据
  * @return {[]}
  */
-const insertAfter = (tree, predicate, newData) => {
+export const insertAfter = (tree, predicate, newData) => {
   return _insertHelper(tree, predicate, newData, 'after');
 }
 
@@ -47,7 +47,7 @@ const insertAfter = (tree, predicate, newData) => {
  * @param {T} newData 新数据
  * @return {[]}
  */
-const insertToChild = (tree, predicate, newData) => {
+export const insertToChild = (tree, predicate, newData) => {
   const newDataArray = Array.isArray(newData) ? newData : [ newData ];
   const insertRecursive = node => {
     if (predicate(node)) {
@@ -77,7 +77,7 @@ const insertToChild = (tree, predicate, newData) => {
  * @param {function} newData 新数据，函数 (node) => {}, 返回新数据
  * @return {[]}
  */
-const updateNode = (tree, predicate, newData) => {
+export const updateNode = (tree, predicate, newData) => {
   const insertRecursive = node => {
     if (predicate(node)) {
       return { ...newData(node) };
@@ -97,7 +97,7 @@ const updateNode = (tree, predicate, newData) => {
 }
 
 /** 删除节点 */
-const deleteNode = (tree, predicate) => {
+export const deleteNode = (tree, predicate) => {
   const newTreeData = [];
 
   tree.forEach(node => {
@@ -117,13 +117,17 @@ const deleteNode = (tree, predicate) => {
   return newTreeData;
 }
 
-export {
-  filterNode,
-  findNode,
-  flat,
-  insertBefore,
-  insertAfter,
-  insertToChild,
-  updateNode,
-  deleteNode
+/**
+ * 替换树节点对象
+ * @param tree
+ * @param func
+ * @return {*}
+ */
+export const replaceNode = (tree, func) => {
+  return tree.map(node => {
+    return {
+      ...func(node),
+      children: this.replaceNode(node.children || [], func)
+    }
+  })
 }

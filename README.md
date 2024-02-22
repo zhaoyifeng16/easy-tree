@@ -71,3 +71,12 @@ const data = updateNode(treeData, (node) => node.key === '0', (node) => ({ ...no
 const data = deleteNode(treeData, (node) => node.key === '1')
 ```
 
+### replaceNode
+替换树节点对象
+
+```javascript
+const data = replaceNode(treeData, node => ({
+  id: node.id
+}))
+```
+
