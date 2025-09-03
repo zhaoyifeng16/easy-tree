@@ -1,22 +1,21 @@
-import { _filterNode, _flat, _insertHelper } from './helper';
+import { _filterNode, _flat, _insertHelper } from "./helper";
 
 /**
  * 树筛选
  */
 export const filterNode = (tree, func) => {
   return _filterNode(tree, func);
-}
+};
 
 /** 树查找 */
 export const findNode = (tree, func) => {
-  return _flat(tree)
-    .filter(func);
-}
+  return _flat(tree).filter(func);
+};
 
 /** 扁平化 */
 export const flat = (tree) => {
   return _flat(tree);
-}
+};
 
 /**
  * 向树结构节点前插入数据
@@ -26,8 +25,8 @@ export const flat = (tree) => {
  * @return {[]}
  */
 export const insertBefore = (tree, predicate, newData) => {
-  return _insertHelper(tree, predicate, newData, 'before');
-}
+  return _insertHelper(tree, predicate, newData, "before");
+};
 
 /**
  * 向节点后插入
@@ -37,8 +36,8 @@ export const insertBefore = (tree, predicate, newData) => {
  * @return {[]}
  */
 export const insertAfter = (tree, predicate, newData) => {
-  return _insertHelper(tree, predicate, newData, 'after');
-}
+  return _insertHelper(tree, predicate, newData, "after");
+};
 
 /**
  * 向节点插入子节点
@@ -49,18 +48,18 @@ export const insertAfter = (tree, predicate, newData) => {
  * @return {[]}
  */
 export const insertToChild = (tree, predicate, newData, isBefore = false) => {
-  const newDataArray = Array.isArray(newData) ? newData : [ newData ];
-  const insertRecursive = node => {
+  const newDataArray = Array.isArray(newData) ? newData : [newData];
+  const insertRecursive = (node) => {
     if (predicate(node)) {
       if (isBefore) {
         return {
           ...node,
-          children: [ ...newDataArray, ...node.children || [] ]
+          children: [...newDataArray, ...(node.children || [])],
         };
       } else {
         return {
           ...node,
-          children: [ ...node.children || [], ...newDataArray ]
+          children: [...(node.children || []), ...newDataArray],
         };
       }
     }
@@ -68,7 +67,7 @@ export const insertToChild = (tree, predicate, newData, isBefore = false) => {
     if (node.children) {
       return {
         ...node,
-        children: node.children.map(insertRecursive)
+        children: node.children.map(insertRecursive),
       };
     }
 
@@ -76,7 +75,7 @@ export const insertToChild = (tree, predicate, newData, isBefore = false) => {
   };
 
   return tree.map(insertRecursive);
-}
+};
 
 /**
  * 修改节点
@@ -86,7 +85,7 @@ export const insertToChild = (tree, predicate, newData, isBefore = false) => {
  * @return {[]}
  */
 export const updateNode = (tree, predicate, newData) => {
-  const insertRecursive = node => {
+  const insertRecursive = (node) => {
     if (predicate(node)) {
       return { ...newData(node) };
     }
@@ -94,7 +93,7 @@ export const updateNode = (tree, predicate, newData) => {
     if (node.children) {
       return {
         ...node,
-        children: node.children.map(insertRecursive)
+        children: node.children.map(insertRecursive),
       };
     }
 
@@ -102,13 +101,13 @@ export const updateNode = (tree, predicate, newData) => {
   };
 
   return tree.map(insertRecursive);
-}
+};
 
 /** 删除节点 */
 export const deleteNode = (tree, predicate) => {
   const newTreeData = [];
 
-  tree.forEach(node => {
+  tree.forEach((node) => {
     if (predicate(node)) {
       return;
     }
@@ -123,19 +122,20 @@ export const deleteNode = (tree, predicate) => {
   });
 
   return newTreeData;
-}
+};
 
 /**
  * 替换树节点对象
- * @param tree
- * @param func
- * @return {*}
+ * @param {Array} tree 树形数据结构
+ * @param {Function} func 替换函数，接收节点对象作为参数，返回新的节点对象
+ * @return {Array} 返回替换后的新树结构
  */
 export const replaceNode = (tree, func) => {
-  return tree.map(node => {
-    return {
-      ...func(node),
-      children: replaceNode(node.children || [], func)
+  return tree.map((node) => {
+    const newNode = func(node);
+    if (node.children && node.children.length > 0) {
+      newNode.children = replaceNode(node.children, func);
     }
-  })
-}
+    return newNode;
+  });
+};
